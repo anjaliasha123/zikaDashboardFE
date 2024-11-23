@@ -1,11 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import MapView from './components/map-view/MapView'
+import getAllReports from './http-operations/api.js'
 
 function App() {
-  const items = {
+  const itemsDummy = {
     type: "FeatureCollection",
     features: [
       {
@@ -46,11 +47,29 @@ function App() {
       },
     ],
   };
-
+  const [data, setData] = useState(itemsDummy);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(()=>{
+    const fetchGeoJSON = async ()=>{
+      try{
+        const response = await getAllReports();
+        setData(response.data);
+      } catch(err){
+        setError(err.message);
+      } finally{
+        setLoading(false);
+      }
+    }
+    fetchGeoJSON();
+  },[]);
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <h1>OpenLayers Map with GeoJSON Reports - Zika Virus Epedimic</h1>
-      <MapView items={items}/>
+      <MapView items={data}/>
     </div>
   );
 }

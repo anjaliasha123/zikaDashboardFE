@@ -27,7 +27,7 @@ function MapView({ items }) {
             stroke: new Stroke({ color: "red", width: 1 }),
         }),
     });
-    // const [selectedFeature, setFeature] = useState(null);
+
     const selectedFeatureRef = useRef(null);
     const handleClose = ()=>{
         setPopup(false);
@@ -66,12 +66,9 @@ function MapView({ items }) {
             if (clickedFeature) {
                 const coordinates = clickedFeature.getGeometry().getCoordinates();
                 const properties = clickedFeature.getProperties();
-                // setSelectedProperties(properties);
                 if (selectedFeatureRef.current && clickedFeature === selectedFeatureRef.current) {
-                    // Deselect the same feature
                     handleClose();
                 }else {
-                    // Select a new feature
                     if (selectedFeatureRef.current) {
                         selectedFeatureRef.current.setStyle(unselectedStyle);
                     }
