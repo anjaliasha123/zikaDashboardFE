@@ -13,10 +13,29 @@ function MapView({ items }) {
     const mapRef = useRef(null);
     const [showPopup, setPopup] = useState(false);
     const [selectedProperties, setSelectedProperties] = useState(null);
-
+    const selectedStyle = new Style({
+        image: new Circle({
+            radius: 9,
+            fill: new Fill({ color: "blue" }),
+            stroke: new Stroke({ color: "yellow", width: 2 }),
+        }),
+    });
+    const unselectedStyle = new Style({
+        image: new Circle({
+            radius: 5,
+            fill: new Fill({ color: "red" }),
+            stroke: new Stroke({ color: "red", width: 1 }),
+        }),
+    });
+    // const [selectedFeature, setFeature] = useState(null);
+    const selectedFeatureRef = useRef(null);
     const handleClose = ()=>{
         setPopup(false);
         setSelectedProperties(null);
+        if (selectedFeatureRef.current) {
+            selectedFeatureRef.current.setStyle(unselectedStyle);
+            selectedFeatureRef.current = null;
+        }
     }
     useEffect(() => {
         const reportSource = new VectorSource({
@@ -27,13 +46,7 @@ function MapView({ items }) {
         });
         const reportLayer = new VectorLayer({
             source: reportSource,
-            style: new Style({
-                image: new Circle({
-                    radius: 5,
-                    fill: new Fill({ color: "red" }),
-                    stroke: new Stroke({ color: "red", width: 1 }),
-                }),
-            }),
+            style: unselectedStyle,
         });
         const map = new Map({
             target: mapRef.current,
@@ -49,23 +62,36 @@ function MapView({ items }) {
         
         // Handle feature click event
         map.on("click", (evt) => {
-            console.log("clicked");
-            const feature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
-            if (feature) {
-                const coordinates = feature.getGeometry().getCoordinates();
-                const properties = feature.getProperties();
-                setSelectedProperties(properties);
-                setPopup(true);
-                console.log("cordinates: ", coordinates); 
+            let clickedFeature = map.forEachFeatureAtPixel(evt.pixel, (feature) => feature);
+            if (clickedFeature) {
+                const coordinates = clickedFeature.getGeometry().getCoordinates();
+                const properties = clickedFeature.getProperties();
+                // setSelectedProperties(properties);
+                if (selectedFeatureRef.current && clickedFeature === selectedFeatureRef.current) {
+                    // Deselect the same feature
+                    handleClose();
+                }else {
+                    // Select a new feature
+                    if (selectedFeatureRef.current) {
+                        selectedFeatureRef.current.setStyle(unselectedStyle);
+                    }
+                    clickedFeature.setStyle(selectedStyle);
+                    selectedFeatureRef.current = clickedFeature;
+                    setPopup(true);
+                    setSelectedProperties(properties);
+                }
+            }else{
+                handleClose();
             }
         });
-        return () => { map.setTarget(null) };
+        return () => { map.setTarget(null);  };
     }, [items]);
 
     return (
         <div>
             <div id="map" ref={mapRef}></div>
             {showPopup && <InfoView properties={selectedProperties} onClose={handleClose}/>}
+            {selectedFeatureRef.current && <div>{selectedFeatureRef.current.getGeometry().getCoordinates()}</div>}
         </div>
     )
 }
