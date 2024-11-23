@@ -48,7 +48,7 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ width: "100%", height: "100%" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <h1>OpenLayers Map with GeoJSON Reports - Zika Virus Epedimic</h1>
       <MapView items={items}/>
     </div>
