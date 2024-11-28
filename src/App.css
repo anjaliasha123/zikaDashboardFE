@@ -19,14 +19,17 @@
 .column {
   flex: 50%;
 }
-
-.info-view{
+.view{
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-    top: 50%;
 }
+.info-view{
+  margin-top: 50%;
+  margin-bottom: 50%;
+}
+
 .card {  
   border-radius: 7px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);

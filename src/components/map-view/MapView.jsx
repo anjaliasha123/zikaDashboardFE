@@ -9,6 +9,8 @@ import { Style, Circle, Fill, Stroke } from "ol/style";
 import { fromLonLat } from "ol/proj";
 import InfoView from "../InfoView";
 import Legend from "./Legend";
+import CardComponent from "../mini-components/CardComponent";
+import ListCard from "../mini-components/ListCard";
 
 function MapView({ items }) {
     const mapRef = useRef(null);
@@ -98,6 +100,7 @@ function MapView({ items }) {
             } else {
                 handleClose();
             }
+            console.log(clickedFeature)
         });
         return () => { map.setTarget(null); };
     }, [items]);
@@ -105,12 +108,12 @@ function MapView({ items }) {
     return (
         <div className="row">
             <div id="map" ref={mapRef} className="column">
-            <Legend classColors = {classColors}/>
+                <Legend classColors={classColors} />
             </div>
             <div className="column column2">
-                <div className="info-view">
-                    {showPopup && <InfoView properties={selectedProperties} onClose={handleClose} />}
-                    {/* {selectedFeatureRef.current && <div>POINT {selectedFeatureRef.current.getGeometry().getCoordinates()[0]}, {selectedFeatureRef.current.getGeometry().getCoordinates()[1]}</div>} */}
+                <div className="view">
+                    <div className="info-view">{showPopup && <CardComponent properties={selectedProperties} closeObject={{ isClosable: true, onClose: handleClose }} />}</div>
+                    {!showPopup && <ListCard list={items.features} isCloseable={false} onClose={handleClose}></ListCard>}
                 </div>
             </div>
         </div>
