@@ -20,20 +20,38 @@ function MapView({ items }) {
             stroke: new Stroke({ color: "yellow", width: 2 }),
         }),
     });
-    const unselectedStyle = new Style({
-        image: new Circle({
+
+    const classColors = {
+        Amphibia: 'red',
+        Reptilia: 'green',
+        Default: 'gray' // fallback color
+      };
+      const styleFunction = (feature) => {
+        const featureClass = feature.get('class'); // Get the class property
+        const color = classColors[featureClass] || classColors['Default']; // Get color based on class
+        return new Style({
+          image: new Circle({
             radius: 5,
-            fill: new Fill({ color: "red" }),
-            stroke: new Stroke({ color: "red", width: 1 }),
-        }),
-    });
+            fill: new Fill({ color: color }),
+            stroke: new Stroke({ color: color, width: 1 })
+          })
+        });
+      };
+    // const unselectedStyle = new Style({
+    //     image: new Circle({
+    //         radius: 5,
+    //         fill: new Fill({color: "rgba(255,255,255,0.5)"}),
+    //         stroke: new Stroke({ color: "red", width: 0.5 }),
+    //     }),
+    // });
+    
 
     const selectedFeatureRef = useRef(null);
     const handleClose = ()=>{
         setPopup(false);
         setSelectedProperties(null);
         if (selectedFeatureRef.current) {
-            selectedFeatureRef.current.setStyle(unselectedStyle);
+            selectedFeatureRef.current.setStyle(styleFunction(selectedFeatureRef.current));
             selectedFeatureRef.current = null;
         }
     }
@@ -46,7 +64,7 @@ function MapView({ items }) {
         });
         const reportLayer = new VectorLayer({
             source: reportSource,
-            style: unselectedStyle,
+            style: styleFunction,
         });
         const map = new Map({
             target: mapRef.current,
@@ -55,7 +73,7 @@ function MapView({ items }) {
                 reportLayer
             ],
             view: new View({
-                center: fromLonLat([-62.668875, -10.626234]),
+                center: fromLonLat([-83.2142, 35.11419]),
                 zoom: 2
             }),
         });
@@ -70,7 +88,7 @@ function MapView({ items }) {
                     handleClose();
                 }else {
                     if (selectedFeatureRef.current) {
-                        selectedFeatureRef.current.setStyle(unselectedStyle);
+                        selectedFeatureRef.current.setStyle(styleFunction(selectedFeatureRef,current));
                     }
                     clickedFeature.setStyle(selectedStyle);
                     selectedFeatureRef.current = clickedFeature;
@@ -85,10 +103,14 @@ function MapView({ items }) {
     }, [items]);
 
     return (
-        <div>
-            <div id="map" ref={mapRef}></div>
+        <div className="row">
+            <div id="map" ref={mapRef} className="column"></div>
+            <div className="column column2">
+            <div className="info-view">
             {showPopup && <InfoView properties={selectedProperties} onClose={handleClose}/>}
-            {selectedFeatureRef.current && <div>{selectedFeatureRef.current.getGeometry().getCoordinates()}</div>}
+            {/* {selectedFeatureRef.current && <div>POINT {selectedFeatureRef.current.getGeometry().getCoordinates()[0]}, {selectedFeatureRef.current.getGeometry().getCoordinates()[1]}</div>} */}
+            </div>
+            </div>
         </div>
     )
 }

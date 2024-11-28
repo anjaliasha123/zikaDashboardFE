@@ -3,12 +3,24 @@ import Button from "./mini-components/Button";
 function InfoView({ properties, onClose}) {
     return (
         <div>
-            <Button onClick={onClose} label={'Close'}/>
-            <div className="absolute inset-40 bg-white p-10">
-                <strong>Location:</strong> {properties.location}<br/>
-                <strong>Reported Date:</strong> {properties.reportedDate}<br/>
-                <strong>Value:</strong> {properties.value} {properties.unit}<br/>
+            {/* <div className="">
+                <strong>Kingdom:</strong> {properties.kingdom} <br/>
+                <strong>Class:</strong> {properties.class} <br/>
+                <strong>Phylum:</strong> {properties.phylum}<br/>
+                <strong>Location:</strong> {properties.country} - {properties.state}<br/>
+            </div> */}
+            <div className="card">
+            <div className="content">
+                <h2 className="title">{properties.country} - {properties.state}</h2>
+                <p className="data">
+                <strong>Kingdom:</strong> {properties.kingdom} <br/>
+                <strong>Class:</strong> {properties.class} <br/>
+                <strong>Phylum:</strong> {properties.phylum}<br/>
+                </p>
+                <Button onClick={onClose} label={'Close'}/>
             </div>
+        </div>
+            
         </div>
     );
     

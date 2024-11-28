@@ -10,66 +10,81 @@ function App() {
     type: "FeatureCollection",
     features: [
       {
-        geometry: {
-          type: "Point",
-          coordinates: [-62.668875, -10.626234], // Brazil-Rondonia
-        },
-        properties: {
-          dataField: "zika_reported",
-          unit: "cases",
-          reportedDate: "2016-04-02",
-          timePeriod: "NA",
-          locationType: "state",
-          location: "Brazil-Rondonia",
-          dataFieldCode: "BR0011",
-          timePeriodType: "NA",
-          value: "618",
-        },
-        type: "Feature",
-      },
-      {
-        geometry: {
-          type: "Point",
-          coordinates: [-70.208121, -8.385155], // Brazil-Acre
-        },
-        properties: {
-          dataField: "zika_reported",
-          unit: "cases",
-          reportedDate: "2016-04-02",
-          timePeriod: "NA",
-          locationType: "state",
-          location: "Brazil-Acre",
-          dataFieldCode: "BR0011",
-          timePeriodType: "NA",
-          value: "375",
-        },
-        type: "Feature",
-      },
+        "geometry": {
+    "type": "Point",
+    "coordinates": [
+        -83.2142,
+        35.11419
+    ]
+},
+"properties": {
+    "country": "United States",
+    "phylum": "Chordata",
+    "state": "North Carolina",
+    "kingdom": "Animalia",
+    "class": "Amphibia"
+},
+"type": "Feature"
+},
+{
+"geometry": {
+    "type": "Point",
+    "coordinates": [
+        -87.73791,
+        40.13832
+    ]
+},
+"properties": {
+    "country": "United States",
+    "phylum": "Chordata",
+    "state": "Illinois",
+    "kingdom": "Animalia",
+    "class": "Amphibia"
+},
+"type": "Feature"
+},
+{
+"geometry": {
+    "type": "Point",
+    "coordinates": [
+        -82.8982,
+        32.0909
+    ]
+},
+"properties": {
+    "country": "United States",
+    "phylum": "Chordata",
+    "state": "Georgia",
+    "kingdom": "Animalia",
+    "class": "Reptilia"
+},
+"type": "Feature"
+},
     ],
   };
-  const [data, setData] = useState(itemsDummy);
+  // const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   
-  useEffect(()=>{
-    const fetchGeoJSON = async ()=>{
-      try{
-        const response = await getAllReports();
-        setData(response.data);
-      } catch(err){
-        setError(err.message);
-      } finally{
-        setLoading(false);
-      }
-    }
-    fetchGeoJSON();
-  },[]);
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
+  // useEffect(()=>{
+  //   const fetchGeoJSON = async ()=>{
+  //     try{
+  //       const response = await getAllReports();
+  //       setData(response.data);
+  //     } catch(err){
+  //       setError(err.message);
+  //     } finally{
+  //       setLoading(false);
+  //     }
+  //   }
+  //   fetchGeoJSON();
+  // },[]);
+  // if (loading) return <p>Loading...</p>;
+  // if (error) return <p>Error: {error}</p>;
   return (
-    <div style={{ width: "100%", height: "100%" }}>
-      <h1>OpenLayers Map with GeoJSON Reports - Zika Virus Epedimic</h1>
-      <MapView items={data}/>
+    <div >
+      <h1>OpenLayers Map with GeoJSON Reports - </h1>
+      <MapView items={itemsDummy}/>
     </div>
   );
 }
