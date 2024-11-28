@@ -88,7 +88,7 @@ function MapView({ items }) {
                     handleClose();
                 } else {
                     if (selectedFeatureRef.current) {
-                        selectedFeatureRef.current.setStyle(styleFunction(selectedFeatureRef, current));
+                        selectedFeatureRef.current.setStyle(styleFunction(selectedFeatureRef.current));
                     }
                     clickedFeature.setStyle(selectedStyle);
                     selectedFeatureRef.current = clickedFeature;
